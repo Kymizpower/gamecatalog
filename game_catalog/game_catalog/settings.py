@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from django.template import Library
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -123,3 +124,16 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Добавляем настройки для медиафайлов
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# В конец settings.py добавьте:
+
+# Кастомные фильтры для шаблонов
+
+register = Library()
+
+@register.filter
+def split(value, delimiter):
+    """Разделяет строку по разделителю"""
+    if value:
+        return value.split(delimiter)
+    return []
