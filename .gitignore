@@ -1,0 +1,36 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+media/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
+.env.local
+
+# Static files (собираются командой collectstatic)
+staticfiles/
+
+# Logs
+logs/
+*.log
