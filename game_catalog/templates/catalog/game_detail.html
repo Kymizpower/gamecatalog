@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ game.title }} - GameCatalog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Левая колонка с изображением -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            {% if game.image %}
+            <img src="{{ game.image.url }}" class="card-img-top" alt="{{ game.title }}">
+            {% endif %}
+            
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    {% if game.is_available %}
+                    <button class="btn btn-success btn-lg">
+                        <i class="bi bi-cart-plus"></i> Купить за {{ game.price }} ₽
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                        <i class="bi bi-heart"></i> В избранное
+                    </button>
+                    {% else %}
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        <i class="bi bi-slash-circle"></i> Недоступно
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Инфо бокс -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Информация об игре</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <td><strong>Разработчик:</strong></td>
+                        <td>{{ game.developer }}</td>
+                    </tr>
+                    {% if game.publisher %}
+                    <tr>
+                        <td><strong>Издатель:</strong></td>
+                        <td>{{ game.publisher }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td><strong>Жанр:</strong></td>
+                        <td><span class="badge bg-info">{{ game.genre }}</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Платформа:</strong></td>
+                        <td><span class="badge bg-secondary">{{ game.platform }}</span></td>
+                    </tr>
+                    {% if game.release_date %}
+                    <tr>
+                        <td><strong>Дата выхода:</strong></td>
+                        <td>{{ game.release_date|date:"d.m.Y" }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if game.metacritic_score %}
+                    <tr>
+                        <td><strong>Metacritic:</strong></td>
+                        <td>
+                            <span class="badge {% if game.metacritic_score >= 80 %}bg-success{% elif game.metacritic_score >= 60 %}bg-warning{% else %}bg-danger{% endif %} p-2">
+                                {{ game.metacritic_score }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Правая колонка с описанием -->
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'game_list' %}">Игры</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ game.title }}</li>
+            </ol>
+        </nav>
+        
+        <h1 class="display-5 mb-3">{{ game.title }}</h1>
+        
+        <div class="d-flex gap-3 mb-4">
+            <div class="text-center">
+                <div class="fs-2">⭐</div>
+                <div class="small text-muted">Рейтинг</div>
+            </div>
+            <div class="text-center">
+                <div class="fs-2">👥</div>
+                <div class="small text-muted">Мультиплеер</div>
+            </div>
+            <div class="text-center">
+                <div class="fs-2">🎮</div>
+                <div class="small text-muted">Одиночная</div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Описание игры</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ game.description|linebreaks }}</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Характеристики</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> Полная поддержка контроллера</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> 4K разрешение</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> Поддержка RTX</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> Мультиплеер до 16 игроков</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> Кроссплатформенная игра</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> Регулярные обновления</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Похожие игры -->
+<div class="mt-5">
+    <h3 class="mb-4">Похожие игры</h3>
+    <div class="row">
+        <!-- Здесь можно добавить блок похожих игр -->
+        <div class="col-12 text-center">
+            <p class="text-muted">Раздел в разработке...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

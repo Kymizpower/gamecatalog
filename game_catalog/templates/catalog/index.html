@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}GameCatalog - Главная{% endblock %}
+
+{% block content %}
+<div class="hero-section mb-5">
+    <div class="p-5 text-center bg-dark text-white rounded-3">
+        <h1 class="display-4">🎮 GameCatalog</h1>
+        <p class="lead">Крупнейшая коллекция игр для всех платформ</p>
+        <a href="{% url 'game_list' %}" class="btn btn-primary btn-lg mt-3">Смотреть все игры</a>
+    </div>
+</div>
+
+<h2 class="mb-4">🔥 Популярные игры</h2>
+
+{% if games %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    {% for game in games %}
+    <div class="col">
+        <div class="card h-100 shadow-sm game-card">
+            {% if game.image %}
+            <img src="{{ game.image.url }}" class="card-img-top" alt="{{ game.title }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="Нет изображения" style="height: 200px; object-fit: cover;">
+            {% endif %}
+            
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ game.title }}</h5>
+                    {% if game.metacritic_score %}
+                    <span class="badge {% if game.metacritic_score >= 80 %}bg-success{% elif game.metacritic_score >= 60 %}bg-warning{% else %}bg-danger{% endif %}">
+                        {{ game.metacritic_score }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <span class="badge bg-info mb-2" style="width: fit-content;">{{ game.genre }}</span>
+                
+                <p class="card-text text-muted small mb-3">{{ game.short_description|truncatechars:100 }}</p>
+                
+                <div class="mt-auto">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <span class="h5 mb-0">
+                                {% if game.price > 0 %}
+                                {{ game.price }} ₽
+                                {% else %}
+                                Бесплатно
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div>
+                            <span class="badge bg-secondary">{{ game.platform }}</span>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ game.get_absolute_url }}" class="btn btn-outline-primary w-100">Подробнее</a>
+                </div>
+            </div>
+            
+            <div class="card-footer bg-transparent border-top-0">
+                <small class="text-muted">
+                    <i class="bi bi-controller"></i> {{ game.developer }} 
+                    {% if game.release_date %}
+                    | <i class="bi bi-calendar3"></i> {{ game.release_date|date:"Y" }}
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+    <h4>Игр пока нет в каталоге</h4>
+    <p>Добавьте игры через админ-панель!</p>
+    <a href="/admin/catalog/game/add/" class="btn btn-primary">Добавить первую игру</a>
+</div>
+{% endif %}
+
+<div class="row mt-5">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-newspaper"></i> Последние новости</h5>
+                <p class="card-text">Следите за обновлениями игрового мира</p>
+                <a href="{% url 'news_list' %}" class="btn btn-outline-secondary">Читать новости</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-chat-dots"></i> Свяжитесь с нами</h5>
+                <p class="card-text">Есть вопросы или предложения?</p>
+                <a href="{% url 'contacts' %}" class="btn btn-outline-secondary">Написать нам</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.game-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+}
+.game-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}
