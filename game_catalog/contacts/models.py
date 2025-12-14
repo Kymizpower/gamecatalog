@@ -6,8 +6,11 @@ class ContactMessage(models.Model):
     phone = models.CharField('Телефон', max_length=20, blank=True)
     message = models.TextField('Сообщение')
     created = models.DateTimeField('Дата отправки', auto_now_add=True)
+    is_processed = models.BooleanField('Обработано', default=False)
+    processed_notes = models.TextField('Заметки обработки', blank=True)
     
     class Meta:
+        ordering = ['-created']
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
     

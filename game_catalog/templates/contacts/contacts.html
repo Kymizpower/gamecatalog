@@ -1,0 +1,411 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}GameCatalog - Контакты{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12 text-center">
+        <h1 class="display-4 mb-3"><i class="bi bi-chat-dots"></i> Контакты</h1>
+        <p class="lead text-muted">
+            Свяжитесь с нами любым удобным способом. Мы всегда рады помочь!
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Контактная информация -->
+    <div class="col-lg-5 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Контактная информация</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <h6><i class="bi bi-geo-alt text-primary"></i> Адрес</h6>
+                        <p class="mb-0">г. Москва, ул. Игровая, д. 123</p>
+                        <p class="text-muted small">БЦ "Game Tower", 5 этаж</p>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <h6><i class="bi bi-telephone text-success"></i> Телефоны</h6>
+                        <p class="mb-1">
+                            <a href="tel:+79991234567" class="text-decoration-none">+7 (999) 123-45-67</a>
+                        </p>
+                        <p class="mb-0">
+                            <a href="tel:+74951234567" class="text-decoration-none">+7 (495) 123-45-67</a>
+                        </p>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <h6><i class="bi bi-envelope text-warning"></i> Email</h6>
+                        <p class="mb-1">
+                            <a href="mailto:info@gamecatalog.ru" class="text-decoration-none">
+                                info@gamecatalog.ru
+                            </a>
+                        </p>
+                        <p class="mb-0">
+                            <a href="mailto:support@gamecatalog.ru" class="text-decoration-none">
+                                support@gamecatalog.ru
+                            </a>
+                        </p>
+                    </div>
+                    
+                    <div class="col-12 mb-4">
+                        <h6><i class="bi bi-clock text-info"></i> График работы</h6>
+                        <p class="mb-1">Пн-Пт: 09:00 - 21:00</p>
+                        <p class="mb-1">Сб-Вс: 10:00 - 20:00</p>
+                        <p class="text-muted small">Без перерывов и выходных</p>
+                    </div>
+                    
+                    <div class="col-12">
+                        <h6><i class="bi bi-share text-danger"></i> Мы в соцсетях</h6>
+                        <div class="d-flex gap-3 mt-3">
+                            <a href="#" class="btn btn-outline-primary">
+                                <i class="bi bi-vk"></i> VK
+                            </a>
+                            <a href="#" class="btn btn-outline-info">
+                                <i class="bi bi-telegram"></i> Telegram
+                            </a>
+                            <a href="#" class="btn btn-outline-dark">
+                                <i class="bi bi-youtube"></i> YouTube
+                            </a>
+                            <a href="#" class="btn btn-outline-success">
+                                <i class="bi bi-discord"></i> Discord
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Форма обратной связи -->
+    <div class="col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Форма обратной связи</h5>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'contacts' %}" id="contact-form">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="id_name" class="form-label">
+                                <i class="bi bi-person"></i> Имя *
+                            </label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="id_email" class="form-label">
+                                <i class="bi bi-envelope"></i> Email *
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_phone" class="form-label">
+                            <i class="bi bi-telephone"></i> Телефон
+                        </label>
+                        {{ form.phone }}
+                        <div class="form-text">{{ form.phone.help_text }}</div>
+                        {% if form.phone.errors %}
+                        <div class="text-danger small mt-1">{{ form.phone.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="id_message" class="form-label">
+                            <i class="bi bi-chat-text"></i> Сообщение *
+                        </label>
+                        {{ form.message }}
+                        <div class="form-text">{{ form.message.help_text }}</div>
+                        {% if form.message.errors %}
+                        <div class="text-danger small mt-1">{{ form.message.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="agreePolicy" required>
+                            <label class="form-check-label small" for="agreePolicy">
+                                Я согласен с 
+                                <a href="#" class="text-decoration-none">политикой конфиденциальности</a>
+                                и обработкой персональных данных
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="reset" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Очистить форму
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Отправить сообщение
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Часто задаваемые вопросы -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-question-circle"></i> Часто задаваемые вопросы</h6>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Как долго обрабатываются заявки?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Мы отвечаем на все обращения в течение 24 часов в рабочие дни.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Можно ли приехать в офис без предварительной записи?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Да, наш офис открыт для посещения в рабочее время.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Предоставляете ли вы техническую поддержку?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Да, техническая поддержка доступна по почте support@gamecatalog.ru и в нашем Discord-сообществе.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Стили для формы */
+#contact-form input,
+#contact-form textarea {
+    border: 1px solid #dee2e6;
+    transition: all 0.3s;
+}
+
+#contact-form input:focus,
+#contact-form textarea:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Стили для карты */
+.card-body iframe {
+    border-radius: 5px;
+}
+
+/* Стили для FAQ */
+.accordion-button:not(.collapsed) {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+}
+
+/* Стили для отзывов */
+.border.rounded {
+    border-color: #e0e0e0 !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Валидация формы на клиенте
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contact-form');
+    const agreeCheckbox = document.getElementById('agreePolicy');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Проверка обязательных полей
+            const requiredFields = contactForm.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                    
+                    // Создаем сообщение об ошибке
+                    if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'invalid-feedback';
+                        errorDiv.textContent = 'Это поле обязательно для заполнения';
+                        field.parentNode.insertBefore(errorDiv, field.nextSibling);
+                    }
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                }
+            });
+            
+            // Проверка согласия с политикой
+            if (!agreeCheckbox.checked) {
+                isValid = false;
+                agreeCheckbox.classList.add('is-invalid');
+                
+                const label = agreeCheckbox.parentNode;
+                if (!label.nextElementSibling || !label.nextElementSibling.classList.contains('invalid-feedback')) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'invalid-feedback';
+                    errorDiv.textContent = 'Необходимо согласиться с политикой конфиденциальности';
+                    label.parentNode.insertBefore(errorDiv, label.nextSibling);
+                }
+            } else {
+                agreeCheckbox.classList.remove('is-invalid');
+            }
+            
+            // Проверка email
+            const emailField = document.getElementById('id_email');
+            if (emailField.value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailField.value)) {
+                    isValid = false;
+                    emailField.classList.add('is-invalid');
+                    
+                    if (!emailField.nextElementSibling || !emailField.nextElementSibling.classList.contains('invalid-feedback')) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'invalid-feedback';
+                        errorDiv.textContent = 'Введите корректный email адрес';
+                        emailField.parentNode.insertBefore(errorDiv, emailField.nextSibling);
+                    }
+                }
+            }
+            
+            // Проверка длины сообщения
+            const messageField = document.getElementById('id_message');
+            if (messageField.value && messageField.value.length < 10) {
+                isValid = false;
+                messageField.classList.add('is-invalid');
+                
+                if (!messageField.nextElementSibling || !messageField.nextElementSibling.classList.contains('invalid-feedback')) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'invalid-feedback';
+                    errorDiv.textContent = 'Сообщение должно содержать минимум 10 символов';
+                    messageField.parentNode.insertBefore(errorDiv, messageField.nextSibling);
+                }
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+                
+                // Прокрутка к первой ошибке
+                const firstError = contactForm.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    firstError.focus();
+                }
+            }
+        });
+        
+        // Убираем классы valid/invalid при изменении полей
+        const formInputs = contactForm.querySelectorAll('input, textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('is-invalid', 'is-valid');
+                
+                // Удаляем сообщения об ошибках
+                const errorDiv = this.nextElementSibling;
+                if (errorDiv && errorDiv.classList.contains('invalid-feedback')) {
+                    errorDiv.remove();
+                }
+            });
+        });
+        
+        // Для чекбокса
+        agreeCheckbox.addEventListener('change', function() {
+            this.classList.remove('is-invalid');
+            const errorDiv = this.parentNode.nextElementSibling;
+            if (errorDiv && errorDiv.classList.contains('invalid-feedback')) {
+                errorDiv.remove();
+            }
+        });
+    }
+    
+    // Имитация отправки формы (для демонстрации)
+    contactForm.addEventListener('submit', function() {
+        // В реальном проекте здесь будет AJAX запрос
+        console.log('Форма отправлена');
+    });
+    
+    // Маска для телефона
+    const phoneField = document.getElementById('id_phone');
+    if (phoneField) {
+        phoneField.addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value[0] !== '7') {
+                    value = '7' + value;
+                }
+                
+                let formatted = '+7';
+                if (value.length > 1) {
+                    formatted += ' (' + value.substring(1, 4);
+                }
+                if (value.length >= 4) {
+                    formatted += ') ' + value.substring(4, 7);
+                }
+                if (value.length >= 7) {
+                    formatted += '-' + value.substring(7, 9);
+                }
+                if (value.length >= 9) {
+                    formatted += '-' + value.substring(9, 11);
+                }
+                
+                this.value = formatted.substring(0, 18);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

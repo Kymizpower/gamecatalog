@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}GameCatalog - Новости{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="bi bi-newspaper"></i> Новости игрового мира</h1>
+    <a href="{% url 'news_list' %}?filter=all" class="btn btn-outline-primary">
+        <i class="bi bi-clock-history"></i> Архив новостей
+    </a>
+</div>
+
+{% if page_obj %}
+<!-- Пагинация сверху -->
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="Навигация по новостям">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="bi bi-chevron-left"></i> Назад
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        Вперед <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="text-center text-muted">
+            Новости {{ page_obj.start_index }} - {{ page_obj.end_index }} из {{ page_obj.paginator.count }}
+        </div>
+    </div>
+</div>
+
+<!-- Список новостей -->
+<div class="row">
+    {% for news in page_obj %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm news-card">
+            <div class="row g-0">
+                {% if news.image %}
+                <div class="col-md-5">
+                    <img src="{{ news.image.url }}" 
+                         class="img-fluid rounded-start h-100" 
+                         alt="{{ news.title }}"
+                         style="object-fit: cover; min-height: 200px;">
+                </div>
+                {% endif %}
+                <div class="col-md-{% if news.image %}7{% else %}12{% endif %}">
+                    <div class="card-body d-flex flex-column h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{ news.title }}</h5>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar3"></i> {{ news.published_date|date:"d.m.Y" }}
+                            </small>
+                        </div>
+                        
+                        <p class="card-text text-muted small flex-grow-1">
+                            {{ news.short_content }}
+                        </p>
+                        
+                        <div class="mt-auto">
+                            <a href="{% url 'news_detail' news.slug %}" class="btn btn-outline-primary">
+                                Читать полностью <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="bi bi-clock"></i> {{ news.published_date|date:"H:i" }}
+                                <span class="ms-3">
+                                    <i class="bi bi-eye"></i> 0 просмотров
+                                </span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Пагинация снизу -->
+<div class="row mt-4">
+    <div class="col-12">
+        <nav aria-label="Навигация по новостям">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="bi bi-chevron-left"></i> Предыдущие
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        Следующие <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% else %}
+<!-- Если новостей нет -->
+<div class="text-center py-5">
+    <div class="mb-4">
+        <i class="bi bi-newspaper display-1 text-muted"></i>
+    </div>
+    <h3 class="mb-3">Новостей пока нет</h3>
+    <p class="text-muted mb-4">
+        Следите за обновлениями, скоро здесь появятся свежие новости игрового мира!
+    </p>
+    <a href="/" class="btn btn-primary">
+        <i class="bi bi-house"></i> Вернуться на главную
+    </a>
+</div>
+{% endif %}
+
+<!-- Блок популярных новостей (можно добавить позже) -->
+<div class="card mt-5">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-fire"></i> Популярные категории новостей</h5>
+    </div>
+    <div class="card-body">
+        <div class="d-flex flex-wrap gap-2">
+            <a href="#" class="badge bg-primary text-decoration-none p-2">
+                <i class="bi bi-joystick"></i> Анонсы игр
+            </a>
+            <a href="#" class="badge bg-success text-decoration-none p-2">
+                <i class="bi bi-graph-up"></i> Обзоры
+            </a>
+            <a href="#" class="badge bg-info text-decoration-none p-2">
+                <i class="bi bi-patch-check"></i> Патчи и обновления
+            </a>
+            <a href="#" class="badge bg-warning text-decoration-none p-2">
+                <i class="bi bi-trophy"></i> Кибеспорт
+            </a>
+            <a href="#" class="badge bg-danger text-decoration-none p-2">
+                <i class="bi bi-gear"></i> Технологии
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.news-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-color: #0d6efd;
+}
+
+/* Стили для изображений новостей */
+.news-card img {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .news-card img {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 0;
+    }
+}
+</style>
+{% endblock %}

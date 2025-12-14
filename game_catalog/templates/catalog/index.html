@@ -5,7 +5,13 @@
 
 {% block content %}
 <div class="hero-section mb-5">
-    <div class="p-5 text-center bg-dark text-white rounded-3">
+    <div class="p-5 text-center text-white rounded-3" style="
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                    url('https://png.pngtree.com/background/20230607/original/pngtree-collection-of-retro-games-and-accessories-are-on-a-pink-background-picture-image_2902819.jpg');
+        background-size: cover;
+        background-position: center;
+        border: none;
+    ">
         <h1 class="display-4">🎮 GameCatalog</h1>
         <p class="lead">Крупнейшая коллекция игр для всех платформ</p>
         <a href="{% url 'game_list' %}" class="btn btn-primary btn-lg mt-3">Смотреть все игры</a>

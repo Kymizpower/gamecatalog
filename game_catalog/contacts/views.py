@@ -1,14 +1,26 @@
 from django.shortcuts import render, redirect
-from .forms import ContactForm
 from django.contrib import messages
+from .forms import ContactForm
 
 def contacts(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Сообщение отправлено!')
-            return redirect('contacts')
+            try:
+                form.save()
+                messages.success(request, '✅ Ваше сообщение успешно отправлено! Мы ответим вам в ближайшее время.')
+                return redirect('contacts')
+            except Exception as e:
+                messages.error(request, f'❌ Произошла ошибка при отправке сообщения: {str(e)}')
+        else:
+            messages.error(request, '❌ Пожалуйста, исправьте ошибки в форме.')
     else:
         form = ContactForm()
-    return render(request, 'contacts/contacts.html', {'form': form})
+    
+    context = {
+        'form': form,
+        'page_title': 'Контакты',
+        'page_description': 'Свяжитесь с нами любым удобным способом. Мы всегда рады помочь!',
+    }
+    
+    return render(request, 'contacts/contacts.html', context)
